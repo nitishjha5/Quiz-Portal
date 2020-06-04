@@ -1,0 +1,15 @@
+Quiz Portal
+        1. Description: Quiz Portal is a website where you can give quizzes on many topics.
+        2. Types of users:
+            1. Admin
+            2. User
+        3. Functionality:
+            1. users can practice questions on any topic. 
+            2. users can see answers to practice sets questions. 
+            3. Users can take a quiz on any topic. 
+            4. quizzes will be time-bounded. 
+            5. all questions in quizzes will contain some marks. 
+            6. users can see answers to quizzes questions after only attempting the quiz. 
+            7. you can see your rank after attempting each quiz in the leaderboard.
+            8. there will also be a global leaderboard.
+
