@@ -1,17 +1,3 @@
-Release 1
-1.Teacher log in
-2.Teacher adds Quiz
-	2.1 Teacher adds questions 
-	2.2 Teacher adds answer which would be displayed after the quiz ends.
-	2.2 Teacher needs to verify whether multiple options can be marked or not.
-3.Teacher adds Students manually.
-4.Students attempts the quiz.
-5.Display results to students individually.
-
-
-Release 2
-1.Teacher creates group of students who needs to appear the quiz.
-2.Teacher adds the quiz on the group.
-3.Students from the group will attend the quiz
-4.Student can mark a question if they want to revisit the same question after some time during the test.
-5.leaderboard based on the marks scored.
+In this meeting, discussion held about Project Requirements and SRS.
+what things will be there in project.
+how many users will be there. what are the functionalities of users.
