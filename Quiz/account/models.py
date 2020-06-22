@@ -19,11 +19,12 @@ class Attempt(models.Model):
 	user=models.ForeignKey(Student,on_delete=models.CASCADE)
 	quiz=models.ForeignKey('quiz.Quiz',on_delete=models.CASCADE)
 	question=models.ForeignKey('quiz.Questions',on_delete=models.CASCADE)
-	optioon=models.ForeignKey('quiz.Option',on_delete=models.CASCADE)
+	option=models.ForeignKey('quiz.Option',on_delete=models.CASCADE)
 
 class Perfomance(models.Model):
-	user=models.ForeignKey(Student,on_delete=models.CASCADE)
-	quiz=models.ForeignKey('quiz.Quiz',on_delete=models.CASCADE)
+	
 	marks_obtained=models.DecimalField(max_digits=5, decimal_places=2)
 	rank=models.IntegerField()
+	user=models.ForeignKey(Student,on_delete=models.CASCADE)
+	quiz=models.ForeignKey('quiz.Quiz',on_delete=models.CASCADE)
 	# Create your models here.
