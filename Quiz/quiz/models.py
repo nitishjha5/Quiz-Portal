@@ -23,10 +23,10 @@ class Questions(models.Model):
 		return self.text[:10]
 
 class Option(models.Model):
-	ques=models.ForeignKey(Questions,on_delete=models.CASCADE)
+	question=models.ForeignKey(Questions,on_delete=models.CASCADE)
 	text=models.TextField()
 	image=models.ImageField(blank=True)
-	iscoorect= models.BooleanField()
+	iscorrect= models.BooleanField()
 
 
 	
