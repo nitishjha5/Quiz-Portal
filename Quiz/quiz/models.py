@@ -14,7 +14,7 @@ class Quiz(models.Model):
 		return self.title
 
 class Questions(models.Model):
-	quiz=models.ForeignKey(Quiz,on_delete=models.CASCADE)
+	quiz=models.ForeignKey(Quiz,related_name='question',on_delete=models.CASCADE)
 	qno=models.IntegerField(unique=True)
 	text=models.TextField()
 	image=models.ImageField(blank=True)
@@ -23,7 +23,7 @@ class Questions(models.Model):
 		return self.text[:10]
 
 class Option(models.Model):
-	question=models.ForeignKey(Questions,on_delete=models.CASCADE)
+	questions=models.ForeignKey(Questions,related_name='options',on_delete=models.CASCADE)
 	text=models.TextField()
 	image=models.ImageField(blank=True)
 	iscorrect= models.BooleanField()

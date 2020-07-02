@@ -6,30 +6,36 @@ from django.contrib.auth.models import User
 
 
 
-class QuizSerializer(serializers.HyperlinkedModelSerializer):
+class QuizSerializer(serializers.ModelSerializer):
+    question=serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Quiz
-        fields = ('title', 'start_time','end_time','no_of_ques','full_marks','batch')
+        fields = ('question','title', 'start_time','end_time','no_of_ques','full_marks','batch')
 
 class QuestionsSerializer(serializers.HyperlinkedModelSerializer):
+    options=serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Questions
-        fields = ('quiz', 'qno','text','image','mark')
+        fields = ('qno','text','image','options','mark')
 
 class OptionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Option
-        fields = ('question', 'text','image','iscorrect')
+        fields = ( 'text','image','iscorrect')
 
 class BatchSerializer(serializers.HyperlinkedModelSerializer):
+    student=serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Batch
-        fields = ('batch')
+        fields = ('batch','student')
+
+
 
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
+    #students=serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Student
-        fields = ('user', 'name','email','batch')
+        fields = ( 'email','name')
 
  
 class AttemptSerializer(serializers.HyperlinkedModelSerializer):

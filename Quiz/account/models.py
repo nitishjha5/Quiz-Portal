@@ -7,10 +7,10 @@ class Batch(models.Model):
 		return self.batch
 
 class Student(models.Model):
-	 user = models.OneToOneField(User, on_delete=models.CASCADE)
-	 name=models.CharField(max_length=100)
-	 email=models.EmailField(max_length=254)
-	 batch=models.ManyToManyField(Batch)
+	 user = models.OneToOneField(User,related_name='students', on_delete=models.CASCADE)
+	 name = models.CharField(max_length=100)
+	 email= models.EmailField(max_length=254)
+	 batch= models.ManyToManyField(Batch,related_name='student')
 	 
 	
 
