@@ -1,15 +1,20 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-
-from .serializers import QuizSerializer,QuestionsSerializer,OptionSerializer,BatchSerializer,StudentSerializer,AttemptSerializer,PerfomanceSerializer,UserSerializer
+from .serializers import QuizSerializer,QuestionsSerializer,OptionSerializer,AttemptSerializer,PerfomanceSerializer,UserSerializer, RegisterSerializer, LoginSerializer
 from quiz.models import Quiz,Questions,Option
-from account.models import Batch,Student,Attempt,Perfomance
+from account.models import Attempt,Perfomance
 from django.contrib.auth.models import User
-
+from rest_framework import viewsets, permissions  # added permissions
+from rest_framework import generics
+from rest_framework.response import Response
+from knox.models import AuthToken
 
 class QuizViewSet(viewsets.ModelViewSet):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
+    
+
+    
 
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Questions.objects.all()
@@ -19,13 +24,6 @@ class OptionViewSet(viewsets.ModelViewSet):
     queryset = Option.objects.all()
     serializer_class = OptionSerializer
 
-class BatchViewSet(viewsets.ModelViewSet):
-    queryset = Batch.objects.all()
-    serializer_class = BatchSerializer
-
-class StudentViewSet(viewsets.ModelViewSet):
-    queryset = Student.objects.all()
-    serializer_class = StudentSerializer
 
 class AttemptViewSet(viewsets.ModelViewSet):
     queryset = Attempt.objects.all()
@@ -34,8 +32,43 @@ class AttemptViewSet(viewsets.ModelViewSet):
 class PerfomanceViewSet(viewsets.ModelViewSet):
     queryset = Perfomance.objects.all()
     serializer_class = PerfomanceSerializer
-class UserViewSet(viewsets.ModelViewSet):
-    queryset=User.objects.all()
-    serializer_class=UserSerializer
+
+class UserAPIView(generics.RetrieveAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user
+
+
+
+
+
+class RegisterAPIView(generics.GenericAPIView):
+    serializer_class = RegisterSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response({
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "token": AuthToken.objects.create(user)
+        })
+
+
+class LoginAPIView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        return Response({
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "token": AuthToken.objects.create(user)[1]
+        })
 
 # Create your views here.

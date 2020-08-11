@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 djangorestframework = "*"
 django-cors-headers = "*"
+django-rest-knox = "*"
 
 [requires]
 python_version = "3.8"

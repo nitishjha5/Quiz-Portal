@@ -1,8 +1,6 @@
 from django.contrib import admin
-from .models import Student,Batch,Attempt,Perfomance
+from .models import Attempt,Perfomance
 
-admin.site.register(Batch)
-admin.site.register(Student)
 admin.site.register(Attempt)
 admin.site.register(Perfomance)
 

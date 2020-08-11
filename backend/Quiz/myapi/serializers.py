@@ -1,16 +1,18 @@
 from rest_framework import serializers
-
+from django.contrib.auth import authenticate
 from quiz.models import Quiz,Questions,Option
-from account.models import Batch,Student,Attempt,Perfomance
+from account.models import Attempt,Perfomance
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+User._meta.get_field('email')._unique = True
+
+
 
 
 class QuizSerializer(serializers.ModelSerializer):
-    question=serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Quiz
-        fields = ('question','title', 'start_time','end_time','no_of_ques','full_marks','batch')
+        fields = ('title', 'start_time','end_time','no_of_ques','full_marks')
 
 class OptionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -24,30 +26,11 @@ class QuestionsSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-class BatchSerializer(serializers.HyperlinkedModelSerializer):
-    student=serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    class Meta:
-        model = Batch
-        fields = ('batch','student')
 
 
 
-class StudentSerializer(serializers.HyperlinkedModelSerializer):
-    #students=serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    class Meta:
-        model = Student
-        fields = ( 'email','name')
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-      class Meta:
-        model=User
-        fields=('id','username','password')
-      def create(self,validateddata):
-        user=User.objects,create_user(**validateddata)
-        Token.objects.create(user=user)
-        return user
 
 
- 
 class AttemptSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Attempt
@@ -57,5 +40,35 @@ class PerfomanceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Perfomance
         fields = ('marks_obtained', 'rank','user','quiz')
- 
- 
+
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username')
+
+
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = User.objects.create_user(validated_data['username'],
+                                        None,
+                                        validated_data['password'])
+        return user
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Incorrect Credentials")

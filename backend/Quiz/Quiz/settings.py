@@ -43,9 +43,19 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'myapi',
     'corsheaders', 
+    'knox',
     
     
 ]
+REST_FRAMEWORK = {
+    # 'DEFAULT_PERMISSION_CLASSES': [  # remove
+    #     'rest_framework.permissions.AllowAny'
+    # ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (  # added
+        'knox.auth.TokenAuthentication',
+    ),
+    'DATETIME_FORMAT': "%m/%d/%Y %H:%M:%S",
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

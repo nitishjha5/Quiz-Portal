@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime 
 from django.utils import timezone   
+from django.contrib.auth.models import User
 
 
 class Quiz(models.Model):
@@ -9,7 +10,7 @@ class Quiz(models.Model):
 	end_time=models.DateTimeField(default=timezone.now)
 	no_of_ques=models.IntegerField()
 	full_marks=models.DecimalField(max_digits=5, decimal_places=2)
-	batch=models.ForeignKey('account.Batch',on_delete=models.CASCADE)
+	
 	def __str__(self):
 		return self.title
 

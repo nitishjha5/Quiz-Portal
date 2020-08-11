@@ -1,34 +1,79 @@
-import React from 'react';
-import './App.css';
-//import Login from './components/login';
-import {Navbar,NavDropdown} from 'react-bootstrap'
+import React, { Component } from 'react';
+import {Route, Switch, BrowserRouter, Redirect} from 'react-router-dom';
+
+import { Provider, connect } from "react-redux";
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+
+import {auth} from "./actions";
+import ponyApp from "./reducers";
+
+import PonyNote from "./components/PonyNote";
+import NotFound from "./components/NotFound";
+import Register from "./components/Register";
+import Login from "./components/Login";
 import Quiz from './components/quiz';
 
+let store = createStore(ponyApp,applyMiddleware(thunk));
 
-function App() {
-  return (
-    <div className="App">
-<Navbar>
-  <Navbar.Brand href="#home">Quiz-Portal</Navbar.Brand>
-  <Navbar.Toggle />
-  <Navbar.Collapse className="justify-content-end">
-    <Navbar.Text>
-    <NavDropdown title="nitish" id="basic-nav-dropdown">
-        <NavDropdown.Item href="#action/3.1">My profile</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.2">Perfomance</NavDropdown.Item>
-        
-        <NavDropdown.Divider />
-        <NavDropdown.Item href="#action/3.4">Sign out</NavDropdown.Item>
-      </NavDropdown>
-      
+class RootContainerComponent extends Component {
 
-    </Navbar.Text>
-  </Navbar.Collapse>
-</Navbar>
-     
-    <Quiz/>
-    </div>
-  );
+    componentDidMount() {
+        this.props.loadUser();
+    }
+
+    PrivateRoute = ({component: ChildComponent, ...rest}) => {
+        return <Route {...rest} render={props => {
+            if (this.props.auth.isLoading) {
+                return <em>Loading...</em>;
+            } else if (!this.props.auth.isAuthenticated) {
+                return <Redirect to="/login" />;
+            } else {
+                return <ChildComponent {...props} />
+            }
+        }} />
+    }
+
+
+    render() {
+        let {PrivateRoute} = this;
+        return (
+            <BrowserRouter>
+                <Switch>
+                    <PrivateRoute exact path="/" component={PonyNote} />
+                    <Route exact path="/register" component={Register} />
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/quiz" component={Quiz} />
+                    <Route component={NotFound} />
+
+                </Switch>
+            </BrowserRouter>
+        );
+    }
 }
 
-export default App;
+const mapStateToProps = state => {
+    return {
+        auth: state.auth,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        loadUser: () => {
+            return dispatch(auth.loadUser());
+        }
+    }
+}
+
+let RootContainer = connect(mapStateToProps, mapDispatchToProps)(RootContainerComponent);
+
+export default class App extends Component {
+    render() {
+        return (
+            <Provider store={store}>
+                <RootContainer />
+            </Provider>
+        )
+    }
+}
