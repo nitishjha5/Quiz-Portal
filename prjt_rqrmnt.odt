@@ -1,0 +1,22 @@
+
+Quiz Portal
+       
+        1. Types of users:
+            1. Admin
+            2. student
+        3. Functionality:
+             Admin will provide login id and passwords for students
+             Admin can add quiz. 
+             Admin can add questions in quiz. 
+             Admin can add/remove users for quiz.
+             Admin can add marks for each question.
+             Admin can schedule quiz. 
+             Admin can add answers.
+             Student can login to website by id and password provided by Admin.
+             student can appear in quiz at schedued time.
+             Student can see his marks and his rank after attempting quiz.
+             Student  can see his past perfomance.
+
+
+
+

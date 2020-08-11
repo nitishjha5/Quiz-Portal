@@ -1,0 +1,33 @@
+[
+    {
+      "name": "Sum of 10 + 20",
+      "options": ["22", "20", "30", "34"],
+      "correctAns": 2,
+      "selectedAnswer" : null
+    },
+    {
+      "name": "produce of 11*5 ",
+      "options": ["16", "54", "33", "55"],
+      "correctAns": 3,
+      "selectedAnswer" : null
+    },
+    {
+      "name": "Capital city of India",
+      "options": ["Bangalore", "New Delhi", "Mumbai", "Chennai"],
+      "correctAns": 1,
+      "selectedAnswer" : null
+    },
+    {
+      "name": "3 is a prime number",
+      "options": ["Yes", "no", "not a number", "non of the above"],
+      "correctAns": 0,
+      "selectedAnswer" : null
+    },
+    {
+      "name": "The chemical formula for water is",
+      "options": ["HO2", "H2O", "H3O", "HO3"],
+      "correctAns": 1,
+      "selectedAnswer" : null
+    }
+  ]
+  
