@@ -15,11 +15,12 @@ class Register extends Component {
     onSubmit = e => {
         e.preventDefault();
         this.props.register(this.state.username, this.state.password);
+
     }
 
     render() {
         if (this.props.isAuthenticated) {
-            return <Redirect to="/" />
+            return <Redirect to="/"/>
         }
         return (
             <form onSubmit={this.onSubmit}>

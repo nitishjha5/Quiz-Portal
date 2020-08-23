@@ -60,7 +60,8 @@ selectOption = (i,index) => () =>
       <div className="quizs">
         <h1> Quiz question(s)</h1>  
         
-          {currentPost.map((item) =>             
+          {currentPost.map((item) => 
+
               (<div> 
                   <div><span>{item.qno}) </span> {item.text}
                   <div id='questions'>
@@ -90,8 +91,11 @@ selectOption = (i,index) => () =>
 
                   <hr/>     
               </div>
-              ))}
+
+              ))
+            }
             <Pagination postsPerPage={this.state.postsPerPage} totalpost={this.state.quiz.length} paginate={this.paginate}/>
+            
       <Button variant="danger">End Quiz</Button>
       </div>
     );

@@ -59,6 +59,9 @@ class RegisterAPIView(generics.GenericAPIView):
         })
 
 
+
+
+
 class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
 

@@ -13,7 +13,7 @@ return(
 <ul className="pagination">
 {PageNumbers.map(no => (
 <li className="page-item" key={no}>
-<a onClick={()=> props.paginate(no)} href="!#" className="page-link">{no}</a>
+<a onClick={()=> props.paginate(no)}  className="page-link">{no}</a>
 </li>
 ))}
 

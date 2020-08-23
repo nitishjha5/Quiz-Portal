@@ -4,7 +4,7 @@ from quiz.models import Quiz,Questions,Option
 from account.models import Attempt,Perfomance
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
-User._meta.get_field('email')._unique = True
+
 
 
 
