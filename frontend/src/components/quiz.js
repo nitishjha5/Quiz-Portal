@@ -11,6 +11,7 @@ class Quiz extends Component{
       quiz:[],
       currentpage:1,
       postsPerPage:1,
+
     }
     this.paginate=this.paginate.bind(this)
 
@@ -35,70 +36,94 @@ class Quiz extends Component{
     });
   }
 
-selectOption = (i,index) => () =>
-  {
-    
-    const { quiz } =this.state;
-    quiz[i].selectedAnswer=index;
-    this.setState({
-      ...this.state,
-      quiz:quiz
-    });
-    
+
+
+  
+   onAnswer(question, option) {
+    if(option.select===false){
+      {
+        console.log(option.text)
+      option.select=true;
+      }
+    }
+    else{
+
+        console.log(option.text)
+      option.select=false;
+      
+    }
   }
+    
+    setMode=(e)=>{
+      e.preventDefault();
+      console.log(this.state.quiz);
+      axios.post('http://127.0.0.1:8000/api/auth/question/',this.state.quiz)
+    .then(response => {
+      
+      console.log(response);
+    })
+    .catch(error => {
+      console.log(error);
+    })
+
+
+    }
+        /*let quiz = JSON.parse(JSON.stringify(this.props.quiz));
+        let q = quiz.questions.find(x => x.id === question.id);
+        if (q.questionTypeId === 1) {
+            q.options.forEach((x) => { x.selected = false; });
+        }
+        q.options.find(x => x.id === option.id).selected = true;
+        this.props.onAnswer(quiz);*/
+    
 
 
   
 
   render(){
-    var indexofLastPost=(this.state.currentpage)*(this.state.postsPerPage);
+
+ var indexofLastPost=(this.state.currentpage)*(this.state.postsPerPage);
    var indexofFirstPost=indexofLastPost-(this.state.postsPerPage);
   //len=quizs.length;
    var currentPost=(this.state.quiz).slice(indexofFirstPost,indexofLastPost);
-    //const {quiz}=this.stste
     return(
-      <div className="quizs">
-        <h1> Quiz question(s)</h1>  
-        
-          {currentPost.map((item) => 
-
-              (<div> 
-                  <div><span>{item.qno}) </span> {item.text}
-                  <div id='questions'>
-                    {item.options.map((items,index)=> {
-                      return (
-                        <div > 
-                          <div>
-                          <h6>                  
-    <label key={index}>
-        <input type="radio" 
-                 
-                value={items.id} 
-                key={index}
-                
-                />
-                {items.text}
-        </label>
-                          </h6>
-
-                          </div>
-                        </div>
-                      )
-                    })}
-                    </div>
-
-                  </div>
-
-                  <hr/>     
-              </div>
-
-              ))
-            }
-            <Pagination postsPerPage={this.state.postsPerPage} totalpost={this.state.quiz.length} paginate={this.paginate}/>
+    <div id="quiz" className="container">
+    <h2 className="text-center font-weight-normal">Quiz-Questions</h2>
+    <hr />
+    {currentPost.map(q =>
+        <div key={q.id}>
+            <div className="badge badge-info">
             
-      <Button variant="danger">End Quiz</Button>
+            <h3 className="font-weight-normal">
+            <span>{q.qno}. {q.text}</span></h3>
+            <div className="row text-left options">
+                {
+                    q.options.map(option =>
+                        <div key={option.id} className="col-6">
+                        <div className="option">
+                        <label className="font-weight-normal" htmlFor={option.id}>
+                        <input id={option.id} checked={option.selected} type="checkbox" 
+
+                         onChange={() => this.onAnswer(q, option)} />
+                        {option.text}
+                        </label>
+                        </div>
+                        </div>
+                    )
+                }
+            </div>
+        </div>
+        </div>
+    )}
+                    <hr/>
+   <Pagination postsPerPage={this.state.postsPerPage} totalpost={this.state.quiz.length} paginate={this.paginate}/>
+            <button id="submit" className="btn btn-primary" onClick={this.setMode}>Submit Quiz</button >
+      
       </div>
-    );
-  }
+    )
+     
 }
+
+}
+
 export default Quiz;

@@ -10,7 +10,8 @@ class Quiz(models.Model):
 	end_time=models.DateTimeField(default=timezone.now)
 	no_of_ques=models.IntegerField()
 	full_marks=models.DecimalField(max_digits=5, decimal_places=2)
-	
+	student = models.ForeignKey(User, 
+		related_name="quizs", on_delete=models.CASCADE, null=True)
 	def __str__(self):
 		return self.title
 
@@ -28,6 +29,7 @@ class Option(models.Model):
 	text=models.TextField()
 	image=models.ImageField(blank=True)
 	iscorrect= models.BooleanField()
+	select=models.BooleanField(default=False)
 
 
 	

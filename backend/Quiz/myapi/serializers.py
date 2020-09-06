@@ -9,20 +9,24 @@ from rest_framework.authtoken.models import Token
 
 
 
-class QuizSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Quiz
-        fields = ('title', 'start_time','end_time','no_of_ques','full_marks')
+
 
 class OptionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Option
-        fields = ( 'text','image','iscorrect')
+        fields = ( 'id','select','text','image')
 class QuestionsSerializer(serializers.HyperlinkedModelSerializer):
     options=OptionSerializer(many=True)
+    
     class Meta:
         model = Questions
         fields = ('qno','text','image','options','mark')
+
+class QuizSerializer(serializers.ModelSerializer):
+    question=QuestionsSerializer(many=True)
+    class Meta:
+        model = Quiz
+        fields = ('student','question','title', 'start_time','end_time','no_of_ques','full_marks')
 
 
 
