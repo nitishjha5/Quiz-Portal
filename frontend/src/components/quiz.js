@@ -4,7 +4,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
 import Pagination from './pagination';
 import {Button} from 'react-bootstrap'
-class Quiz extends Component{
+import {connect} from 'react-redux';
+
+import {notes, auth} from "../actions";
+
+class Quiz extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -13,19 +17,53 @@ class Quiz extends Component{
       postsPerPage:1,
 
     }
+    
     this.paginate=this.paginate.bind(this)
 
   }
-  componentDidMount(){
-    axios.get('http://127.0.0.1:8000/api/auth/question/')
+
+  static getDerivedStateFromProps (newProps,state){
+    
+    console.log(newProps)
+    if(newProps.Token){
+   /* axios.default.headers={
+      "Content-Type": "application/json",
+      "Authorization": "Token "++newProps.Token
+    }
+    console.log(axios.default.headers)*/
+    const {handle} =newProps.match.params
+    axios.get('http://127.0.0.1:8000/api/auth/quizzes/'+handle+'/' ,{
+      headers: {
+        
+      "Authorization": "Token "+newProps.Token
+
+
+      }
+
+}
+      )
     .then(response => {
-      this.setState({quiz:response.data})
-      console.log(response);
+      console.log(response.data.quiz);
+      
+      return {
+          quiz:response.data.quiz,
+          currentpage:1,
+      postsPerPage:1,
+
+    };
+
+      
     })
     .catch(error => {
       console.log(error);
     })
-  }
+
+   }
+return null;
+
+    }
+   
+    
 
    
    
@@ -54,39 +92,20 @@ class Quiz extends Component{
     }
   }
     
-    setMode=(e)=>{
-      e.preventDefault();
-      console.log(this.state.quiz);
-      axios.post('http://127.0.0.1:8000/api/auth/question/',this.state.quiz)
-    .then(response => {
-      
-      console.log(response);
-    })
-    .catch(error => {
-      console.log(error);
-    })
-
-
-    }
-        /*let quiz = JSON.parse(JSON.stringify(this.props.quiz));
-        let q = quiz.questions.find(x => x.id === question.id);
-        if (q.questionTypeId === 1) {
-            q.options.forEach((x) => { x.selected = false; });
-        }
-        q.options.find(x => x.id === option.id).selected = true;
-        this.props.onAnswer(quiz);*/
     
-
+       
 
   
 
   render(){
+console.log(this.state.quiz)
 
  var indexofLastPost=(this.state.currentpage)*(this.state.postsPerPage);
    var indexofFirstPost=indexofLastPost-(this.state.postsPerPage);
   //len=quizs.length;
    var currentPost=(this.state.quiz).slice(indexofFirstPost,indexofLastPost);
     return(
+
     <div id="quiz" className="container">
     <h2 className="text-center font-weight-normal">Quiz-Questions</h2>
     <hr />
@@ -95,7 +114,7 @@ class Quiz extends Component{
             <div className="badge badge-info">
             
             <h3 className="font-weight-normal">
-            <span>{q.qno}. {q.text}</span></h3>
+            <span>{q.qno}. {q.question_set.text}</span></h3>
             <div className="row text-left options">
                 {
                     q.options.map(option =>
@@ -124,6 +143,17 @@ class Quiz extends Component{
      
 }
 
+
 }
 
-export default Quiz;
+
+const mapStateToProps = state => {
+  console.log(state.auth)
+    return {
+        Token: state.auth.token
+
+    }
+}
+
+export default connect(mapStateToProps)(Quiz);
+

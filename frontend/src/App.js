@@ -43,7 +43,7 @@ class RootContainerComponent extends Component {
                     <PrivateRoute exact path="/" component={PonyNote} />
                     <Route exact path="/register" component={Register} />
                     <Route exact path="/login" component={Login} />
-                    <Route exact path="/quiz" component={Quiz} />
+                    <PrivateRoute exact path={"/:handle"} component={Quiz} />
                     <Route component={NotFound} />
 
                 </Switch>

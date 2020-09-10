@@ -5,7 +5,6 @@ console.log("yes"+props.totalpost);
 for(let i=1;i<=Math.ceil((props.totalpost)/(props.postsPerPage));i++)
 {
 PageNumbers.push(i);
-
 }
 return(
 <div>

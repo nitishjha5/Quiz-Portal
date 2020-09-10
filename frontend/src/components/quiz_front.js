@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import Pagination from './pagination';
 import {Button,Card} from 'react-bootstrap'
-class QuizHome extends Component{
+class QuizHome extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +17,7 @@ class QuizHome extends Component{
 
   }
   componentDidMount(){
-    axios.get('http://127.0.0.1:8000/api/auth/quiz/')
+    axios.get('http://127.0.0.1:8000/api/auth/quizzes/')
     .then(response => {
       this.setState({quiz:response.data})
       console.log(response);
@@ -55,12 +55,9 @@ class QuizHome extends Component{
                   <Card>
   <Card.Header as="h5">{item.title}</Card.Header>
   <Card.Body>
-    <Card.Title>Total Question: {item.no_of_ques}<br/> Total Marks:
-    {item.full_marks}</Card.Title>
-    <Card.Text>
-      Start Time: {item.start_time} <br/> End Time: {item.end_time}
-    </Card.Text>
-    <Button variant="primary"><Link to="/quiz">Start Quiz</Link></Button>
+    <Card.Title>Total Question: {item.questions_count}<br/> </Card.Title>
+   
+    <Button variant="primary"><Link to={"/"+item.slug}>Start Quiz</Link></Button>
   </Card.Body>
 </Card>
    

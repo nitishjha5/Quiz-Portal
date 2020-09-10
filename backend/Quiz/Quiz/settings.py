@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'myapi',
     'corsheaders', 
     'knox',
+    'nested_admin',
     
     
 ]
@@ -147,3 +148,4 @@ CORS_ORIGIN_WHITELIST = [
 CORS_ORIGIN_REGEX_WHITELIST = [
     'http://localhost:3030',
 ]
+APPEND_SLASH=False
