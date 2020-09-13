@@ -12,9 +12,13 @@ class Quiz extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      quiz:[],
+      useranswers:[],
+      quiz: [],
+      questions:[],
+
       currentpage:1,
       postsPerPage:1,
+      Token: localStorage.getItem("token"),
 
     }
     
@@ -22,20 +26,13 @@ class Quiz extends React.Component{
 
   }
 
-  static getDerivedStateFromProps (newProps,state){
-    
-    console.log(newProps)
-    if(newProps.Token){
-   /* axios.default.headers={
-      "Content-Type": "application/json",
-      "Authorization": "Token "++newProps.Token
-    }
-    console.log(axios.default.headers)*/
-    const {handle} =newProps.match.params
+  componentDidMount(){
+  console.log(axios.default.headers)
+    const {handle} =this.props.match.params
     axios.get('http://127.0.0.1:8000/api/auth/quizzes/'+handle+'/' ,{
       headers: {
         
-      "Authorization": "Token "+newProps.Token
+      "Authorization": "Token "+this.state.Token
 
 
       }
@@ -43,26 +40,17 @@ class Quiz extends React.Component{
 }
       )
     .then(response => {
-      console.log(response.data.quiz);
-      
-      return {
-          quiz:response.data.quiz,
-          currentpage:1,
-      postsPerPage:1,
-
-    };
-
-      
-    })
+      console.log(response);
+      this.setState({useranswers:response.data.quiz.quiztakers_set})
+      this.setState({quiz:response.data.quiz})
+      this.setState({questions:response.data.quiz.question_set})
+      console.log(response);
+       })
     .catch(error => {
       console.log(error);
     })
-
-   }
-return null;
-
-    }
-   
+  }
+    
     
 
    
@@ -77,47 +65,67 @@ return null;
 
 
   
-   onAnswer(question, option) {
-    if(option.select===false){
+onAnswer(q, option) {
+    let temp = {};
+console.log(q)
+console.log(option)
+temp=this.state.useranswers.usersanswer_set
+{temp.map(name => {
+  
+  
+    if(name.question===q.id)
       {
-        console.log(option.text)
-      option.select=true;
-      }
-    }
-    else{
 
-        console.log(option.text)
-      option.select=false;
-      
+
+        if(name.answer===option.id){
+     name.answer=null}
+    else{
+      name.answer=option.id 
+
     }
+  }
+    console.log(name.question)
+
+}
+)
+
+    }
+console.log(temp)
+
+    
+
+this.state.useranswers.usersanswer_set=temp;
+
+console.log(this.state.useranswers)
   }
     
     
-       
+onSubmit()
+{
+  this.state.useranswers.completed=true;
+  <Link to={"/"+item.slug}+result>
+  </Link>
+}  
 
   
 
   render(){
 console.log(this.state.quiz)
 
- var indexofLastPost=(this.state.currentpage)*(this.state.postsPerPage);
-   var indexofFirstPost=indexofLastPost-(this.state.postsPerPage);
-  //len=quizs.length;
-   var currentPost=(this.state.quiz).slice(indexofFirstPost,indexofLastPost);
     return(
 
-    <div id="quiz" className="container">
-    <h2 className="text-center font-weight-normal">Quiz-Questions</h2>
+    <div id="quiz">
+    <h2 className="text-center font-weight-normal">Quiz</h2>
     <hr />
-    {currentPost.map(q =>
+    { (this.state.questions) .map(q =>
         <div key={q.id}>
-            <div className="badge badge-info">
+            <div className="badge badge-info">Question </div>
             
             <h3 className="font-weight-normal">
-            <span>{q.qno}. {q.question_set.text}</span></h3>
+            <span>{q.text}</span></h3>
             <div className="row text-left options">
                 {
-                    q.options.map(option =>
+                    q.answer_set.map(option =>
                         <div key={option.id} className="col-6">
                         <div className="option">
                         <label className="font-weight-normal" htmlFor={option.id}>
@@ -132,11 +140,11 @@ console.log(this.state.quiz)
                 }
             </div>
         </div>
-        </div>
+
     )}
                     <hr/>
-   <Pagination postsPerPage={this.state.postsPerPage} totalpost={this.state.quiz.length} paginate={this.paginate}/>
-            <button id="submit" className="btn btn-primary" onClick={this.setMode}>Submit Quiz</button >
+  
+            <button id="submit" className="btn btn-primary"> Submit</button >
       
       </div>
     )
@@ -147,13 +155,5 @@ console.log(this.state.quiz)
 }
 
 
-const mapStateToProps = state => {
-  console.log(state.auth)
-    return {
-        Token: state.auth.token
 
-    }
-}
-
-export default connect(mapStateToProps)(Quiz);
-
+export default (Quiz);
